@@ -63,6 +63,7 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 - [x] Conectar a pasta local do TCC ao repositório remoto.
 - [x] Criar um arquivo `.gitignore` para não enviar dados brutos, arquivos temporários e credenciais.
 - [x] Publicar a estrutura inicial, a checklist e as instruções do projeto.
+- [x] Definir ambiente de execução: Google Colab com dados no Google Drive.
 
 ## Registro de avanços
 
@@ -71,6 +72,7 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 - **08/08/2026:** repositório privado `kayokfds/tcc-epge` criado no GitHub e conexão da conta GitHub ao Codex confirmada visualmente pelo usuário.
 - **08/08/2026:** criados `README.md` e `.gitignore` para documentar o projeto e evitar o versionamento de dados brutos, credenciais e arquivos temporários.
 - **08/08/2026:** estrutura inicial publicada no GitHub, no repositório privado `kayokfds/tcc-epge` (branch `main`).
+- **08/08/2026:** definido o uso de Google Colab para execução dos notebooks e Google Drive para armazenamento dos dados e resultados.
 
 ## Registro de decisões
 
@@ -80,3 +82,4 @@ Registre aqui toda decisão confirmada que detalhe ou altere o escopo. Cada entr
 - **08/08/2026 — Universo amplo de ações da B3.** Decisão: trabalhar com todas as ações elegíveis da B3, em vez de uma seleção reduzida de ativos. Justificativa: preservar o escopo e a proposta original do estudo. Impacto: são necessárias regras explícitas de elegibilidade, liquidez, entrada e saída de ativos, além de atenção a viés de sobrevivência. Tarefas afetadas: coleta das cotações, limpeza da base e definição do universo em cada data.
 - **08/08/2026 — Manter otimização de carteira.** Decisão: preservar a otimização média-variância como etapa do trabalho, sem substituí-la por uma regra simplificada de seleção de ações. Justificativa: a otimização é elemento central da pergunta de pesquisa e da contribuição pretendida. Impacto: será necessário definir restrições, matriz de covariância, frequência de rebalanceamento e benchmarks adequados. Tarefas afetadas: especificação metodológica e implementação das carteiras.
 - **08/08/2026 — Random Forest como modelo inicial; macroeconomia ampliada.** Decisão: iniciar com Random Forest e considerar Selic, inclinação da curva de juros e câmbio BRL/USD. Justificativa: manter um modelo de ML interpretável e compatível com o escopo, incorporando a recomendação de incluir câmbio no contexto brasileiro. Impacto: o teste central compara o mesmo método com e sem os fatores macroeconômicos. Tarefas afetadas: levantamento das séries, tratamento de defasagens e estimações.
+- **08/08/2026 — Ambiente computacional e armazenamento.** Decisão: executar os notebooks no Google Colab, armazenar dados e resultados no Google Drive e versionar códigos, notebooks, documentação e checklist no GitHub. Justificativa: eliminar a necessidade de configurar ambiente local e manter os dados fora do repositório, preservando reprodutibilidade pelo código. Impacto: notebooks devem montar o Drive, trabalhar localmente na sessão quando possível e salvar versões no GitHub; dados brutos não devem ser enviados ao repositório. Tarefas afetadas: organização das pastas de dados, criação dos notebooks e rotina de versionamento.
