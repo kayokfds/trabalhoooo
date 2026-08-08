@@ -1,0 +1,20 @@
+# Dados e resultados grandes
+data/raw/
+data/processed/
+outputs/
+
+# Arquivos temporários e ambientes locais
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.DS_Store
+Thumbs.db
+
+# Arquivos de editor e sistema
+.vscode/
+.idea/
+*.tmp
+*.log
