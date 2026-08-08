@@ -62,7 +62,7 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 - [x] Criar o repositório remoto privado no GitHub.
 - [x] Conectar a pasta local do TCC ao repositório remoto.
 - [x] Criar um arquivo `.gitignore` para não enviar dados brutos, arquivos temporários e credenciais.
-- [ ] Publicar a estrutura inicial, a checklist e as instruções do projeto.
+- [x] Publicar a estrutura inicial, a checklist e as instruções do projeto.
 
 ## Registro de avanços
 
@@ -70,6 +70,7 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 - **08/08/2026:** repositório local inicializado e vinculado ao repositório privado `kayokfds/tcc-epge`; a primeira publicação permanece pendente de configuração de autenticação e da revisão dos arquivos a enviar.
 - **08/08/2026:** repositório privado `kayokfds/tcc-epge` criado no GitHub e conexão da conta GitHub ao Codex confirmada visualmente pelo usuário.
 - **08/08/2026:** criados `README.md` e `.gitignore` para documentar o projeto e evitar o versionamento de dados brutos, credenciais e arquivos temporários.
+- **08/08/2026:** estrutura inicial publicada no GitHub, no repositório privado `kayokfds/tcc-epge` (branch `main`).
 
 ## Registro de decisões
 
