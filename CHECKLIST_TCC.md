@@ -9,8 +9,10 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 
 - [x] Criar e conectar o repositório privado do TCC no GitHub.
 - [ ] Escrever o protocolo de dados e de execução da estratégia (uma página).
-- [ ] Baixar e testar a extração das cotações históricas da B3 para 2016–2025.
+- [x] Baixar e testar a extração das cotações históricas da B3 para 2016–2025.
 - [ ] Definir a fonte de preços ajustados e o tratamento de eventos corporativos.
+- [ ] Decidir como obter (ou substituir) o dado de *term spread*: ANBIMA não disponibiliza histórico completo via API pública nem download direto; alternativa em avaliação é calcular via contratos futuros de DI na B3. Nenhuma fonte está confirmada ainda — decisão pendente para o próximo chat.
+- [ ] Buscar e ler artigos que fundamentem a escolha de cada variável macro (Selic, term spread, câmbio). Nenhuma variável tem justificativa de literatura confirmada até o momento — apenas hipóteses de trabalho levantadas em conversa, sem valor de referência acadêmica.
 
 ## Decisões de pesquisa
 
@@ -67,6 +69,11 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 
 ## Registro de avanços
 
+- **22/08/2026:** leitura dos arquivos COTAHIST (2016–2025) resolvida via `pd.read_fwf` com colspecs corretos; ajustado para leitura otimizada (fatiamento de string em Python puro antes de montar o DataFrame, para reduzir tempo de execução). Estratégia de concatenação corrigida para acumular em lista e concatenar uma única vez, evitando estouro de RAM.
+- **22/08/2026:** identificado que o campo `especi` (não `indopc`) é o que sinaliza eventos de proventos (ex-dividendo, ex-juros, ex-bonificação, ex-subscrição, ex-grupamento) — tratamento ainda pendente de implementação.
+- **22/08/2026:** identificado risco metodológico: Selic, term spread e câmbio são idênticos para todos os ativos em uma mesma data, portanto não diferenciam empresas entre si. Será necessário incluir features específicas de cada ativo (ex.: retornos defasados, volatilidade histórica) para que o modelo consiga diferenciar ativos — decisão de quais features usar ainda em aberto.
+- **22/08/2026:** tentativa de obter o *term spread* via API da ANBIMA não teve êxito (endpoint sugerido por terceiros retornou erro 404; não foi confirmada a existência de API pública funcional para série histórica de ETTJ). Fonte do term spread permanece **não definida**.
+- **22/08/2026:** nenhuma variável macro (Selic, term spread, câmbio) tem justificativa de literatura acadêmica levantada e confirmada até o momento. As explicações discutidas em chat são apenas hipóteses de trabalho do próprio Claude para fins de organização de ideias — não substituem revisão de literatura e não devem ser citadas como referência no texto do TCC.
 - **08/08/2026:** projeto inicial revisado; escopo confirmado com dados diários, ações elegíveis da B3, Random Forest, otimização de carteira e variáveis Selic, curva de juros e câmbio.
 - **08/08/2026:** repositório local inicializado e vinculado ao repositório privado `kayokfds/tcc-epge`; a primeira publicação permanece pendente de configuração de autenticação e da revisão dos arquivos a enviar.
 - **08/08/2026:** repositório privado `kayokfds/tcc-epge` criado no GitHub e conexão da conta GitHub ao Codex confirmada visualmente pelo usuário.
