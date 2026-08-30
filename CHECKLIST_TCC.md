@@ -11,8 +11,12 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 - [ ] Escrever o protocolo de dados e de execução da estratégia (uma página).
 - [x] Baixar e testar a extração das cotações históricas da B3 para 2016–2025.
 - [ ] Definir a fonte de preços ajustados e o tratamento de eventos corporativos.
-- [ ] Decidir como obter (ou substituir) o dado de *term spread*: ANBIMA não disponibiliza histórico completo via API pública nem download direto; alternativa em avaliação é calcular via contratos futuros de DI na B3. Nenhuma fonte está confirmada ainda — decisão pendente para o próximo chat.
-- [ ] Buscar e ler artigos que fundamentem a escolha de cada variável macro (Selic, term spread, câmbio). Nenhuma variável tem justificativa de literatura confirmada até o momento — apenas hipóteses de trabalho levantadas em conversa, sem valor de referência acadêmica.
+- [x] Definir a fonte dos vértices da curva: B3, "Mercado de Derivativos - Taxas de Mercado para Swaps / Derivatives Market - Swap Market Rates".
+- [x] Baixar os vértices diários desejados da B3 para construção do *term spread*.
+- [x] Definir o tratamento dos vértices ausentes: quando o prazo desejado não possui observação, realizar interpolação linear entre os dois vértices observados que o cercam, atribuindo pesos inversamente proporcionais à distância até o prazo desejado.
+- [x] Tratar a ausência do arquivo de 25/05/2018: preencher os vértices dessa data pela média simples dos dois dias úteis mais próximos.
+- [ ] Definir precisamente quais dois vértices/maturidades formarão o *term spread* e como o spread será calculado.
+- [ ] Buscar e ler artigos que fundamentem a escolha de cada variável macro (Selic, term spread, câmbio). As fontes e séries de dados já foram definidas; permanece pendente apenas a fundamentação na literatura.
 
 ## Decisões de pesquisa
 
@@ -31,9 +35,11 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 
 - [ ] Mapear fonte, frequência, unidade e disponibilidade de cada série.
 - [ ] Baixar cotações diárias históricas da B3 (2016–2025).
-- [ ] Obter série diária da Selic.
-- [ ] Obter série diária de câmbio (PTAX/BRL-USD) e sua variação.
-- [ ] Obter as duas taxas necessárias para o *term spread*.
+- [x] Obter série diária da Selic.
+- [x] Obter série diária de câmbio (PTAX/BRL-USD) para 2016–2025; a variação será construída posteriormente como feature.
+- [x] Obter os vértices necessários para o *term spread* a partir da publicação oficial da B3.
+- [x] Interpolar linearmente os vértices desejados quando o prazo exato não estiver disponível no arquivo diário, utilizando os dois vértices observados que delimitam o prazo.
+- [x] Tratar 25/05/2018, única data sem o arquivo correspondente, pela média simples dos dois dias úteis adjacentes.
 - [ ] Montar calendário comum de pregões e variáveis macro.
 - [ ] Criar painel `data–ativo` com preços, retornos, liquidez e preditores.
 - [ ] Verificar dados ausentes, duplicidades, preços inválidos e baixa liquidez.
@@ -69,6 +75,12 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 
 ## Registro de avanços
 
+- **30/08/2026:** definida e validada a fonte dos vértices da curva de juros. Os dados foram obtidos da publicação oficial da B3 "Mercado de Derivativos - Taxas de Mercado para Swaps / Derivatives Market - Swap Market Rates", disponível na página de Pesquisa por Pregão.
+- **30/08/2026:** os vértices desejados foram extraídos para todo o período. Quando o prazo exato necessário não estava disponível em determinado arquivo, a taxa foi obtida por interpolação linear entre os dois vértices disponíveis que cercavam o prazo desejado. Por exemplo, para obter a taxa de 252 DU quando estavam disponíveis apenas 250 e 260 DU, foram atribuídos pesos 8/10 à taxa de 250 DU e 2/10 à taxa de 260 DU.
+- **30/08/2026:** foi identificada uma única data sem o arquivo correspondente, 25/05/2018. Para essa data, os valores dos vértices foram preenchidos pela média simples dos dois dias úteis mais próximos. Trata-se de uma única observação em todo o período, com impacto esperado desprezível sobre os resultados.
+- **30/08/2026:** os valores dos vértices foram validados numericamente e apresentaram comportamento consistente com a estrutura observada da curva. A escolha final dos dois vértices que formarão o *term spread* permanece pendente.
+- **30/08/2026:** validada a fonte de câmbio. Foi utilizada a série SGS 1 do Banco Central do Brasil, "Dólar americano (venda) - diário", obtida via API BCData/SGS para 01/01/2016–31/12/2025.
+- **30/08/2026:** concluída a obtenção da série diária da Selic para o período do estudo. A série foi incorporada à base de variáveis macroeconômicas e sua transformação/defasagem será definida posteriormente na construção das features.
 - **22/08/2026:** leitura dos arquivos COTAHIST (2016–2025) resolvida via `pd.read_fwf` com colspecs corretos; ajustado para leitura otimizada (fatiamento de string em Python puro antes de montar o DataFrame, para reduzir tempo de execução). Estratégia de concatenação corrigida para acumular em lista e concatenar uma única vez, evitando estouro de RAM.
 - **22/08/2026:** identificado que o campo `especi` (não `indopc`) é o que sinaliza eventos de proventos (ex-dividendo, ex-juros, ex-bonificação, ex-subscrição, ex-grupamento) — tratamento ainda pendente de implementação.
 - **22/08/2026:** identificado risco metodológico: Selic, term spread e câmbio são idênticos para todos os ativos em uma mesma data, portanto não diferenciam empresas entre si. Será necessário incluir features específicas de cada ativo (ex.: retornos defasados, volatilidade histórica) para que o modelo consiga diferenciar ativos — decisão de quais features usar ainda em aberto.
@@ -85,6 +97,10 @@ Legenda: `[ ]` pendente · `[-]` em andamento · `[x]` concluído
 
 Registre aqui toda decisão confirmada que detalhe ou altere o escopo. Cada entrada deve informar a data, a decisão, sua justificativa, o impacto no trabalho e as tarefas afetadas.
 
+- **30/08/2026 — Fonte dos vértices da curva.** Decisão: utilizar os vértices diários divulgados pela B3 no arquivo "Mercado de Derivativos - Taxas de Mercado para Swaps" para construir a variável de curva de juros. Justificativa: trata-se de fonte oficial da B3 e de uma publicação específica de taxas de mercado para swaps. Impacto: os vértices da B3 passam a ser a fonte primária da curva utilizada no estudo.
+- **30/08/2026 — Interpolação dos vértices.** Decisão: quando o prazo desejado não estiver diretamente disponível no arquivo diário, estimar sua taxa por interpolação linear entre os dois vértices observados que o cercam. Os pesos são determinados pela distância do prazo desejado em relação aos dois vértices. Justificativa: permite obter taxas para os prazos padronizados escolhidos sem extrapolar a curva. Impacto: os vértices utilizados no cálculo do *term spread* podem ser obtidos de forma consistente mesmo quando seus prazos exatos não são divulgados no arquivo.
+- **30/08/2026 — Ausência do arquivo de 25/05/2018.** Decisão: para a única data sem o arquivo correspondente, utilizar a média simples dos valores dos dois dias úteis adjacentes para cada vértice. Justificativa: trata-se de uma única data dentro do período de 2016–2025, de modo que o impacto sobre os resultados é esperado como desprezível. Impacto: permite manter a série diária completa sem alterar significativamente sua composição.
+- **30/08/2026 — Fonte do câmbio.** Decisão: utilizar a série SGS 1 do Banco Central do Brasil, dólar americano (venda), frequência diária, obtida via API BCData/SGS. Justificativa: fonte oficial do Banco Central e série diária disponível durante todo o período de estudo. Impacto: estabelece a fonte primária da variável cambial; sua transformação em variação será realizada posteriormente na etapa de construção das features.
 - **08/08/2026 — Frequência diária.** Decisão: utilizar dados e previsões diárias, em vez de mensais. Justificativa: o objetivo é otimização de carteiras em alta frequência de observação e o usuário definiu que essa é a abordagem adequada ao trabalho. Impacto: a coleta, a validação temporal, o rebalanceamento e as variáveis macro precisam respeitar um calendário diário e a disponibilidade da informação em cada pregão. Tarefas afetadas: protocolo de dados, construção do painel, definição do retorno-alvo e estratégia de execução.
 - **08/08/2026 — Universo amplo de ações da B3.** Decisão: trabalhar com todas as ações elegíveis da B3, em vez de uma seleção reduzida de ativos. Justificativa: preservar o escopo e a proposta original do estudo. Impacto: são necessárias regras explícitas de elegibilidade, liquidez, entrada e saída de ativos, além de atenção a viés de sobrevivência. Tarefas afetadas: coleta das cotações, limpeza da base e definição do universo em cada data.
 - **08/08/2026 — Manter otimização de carteira.** Decisão: preservar a otimização média-variância como etapa do trabalho, sem substituí-la por uma regra simplificada de seleção de ações. Justificativa: a otimização é elemento central da pergunta de pesquisa e da contribuição pretendida. Impacto: será necessário definir restrições, matriz de covariância, frequência de rebalanceamento e benchmarks adequados. Tarefas afetadas: especificação metodológica e implementação das carteiras.
